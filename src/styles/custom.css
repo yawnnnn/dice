@@ -1,0 +1,35 @@
+.flex-1 { flex: 1; }
+.flex-2 { flex: 2; }
+
+.b-a { border: 1px solid #000000; }
+
+.header { height: 70px; background-color: #313a46; }
+.full-height { height: calc(100vh - 70px); }
+.results {
+    height: 48px;
+    font-size: 32px;
+}
+
+.m-b-sm { margin-bottom: 5px; }
+.m-b { margin-bottom: 10px; }
+.m-b-md { margin-bottom: 15px; }
+.m-b-lg { margin-bottom: 20px; }
+
+.m-r-sm { margin-right: 5px; }
+.m-r { margin-right: 10px; }
+
+.p { padding: 15px; }
+.p-md { padding: 20px; }
+.p-lg { padding: 30px; }
+
+.text-md { font-size: 16px; }
+.text-lg { font-size: 18px; }
+.text-xl { font-size: 20px; }
+
+input .text-center {
+    text-align: center;
+}
+
+.card {
+    box-shadow: 0 0 10px 0 rgba(154, 161, 171, .15);
+}
