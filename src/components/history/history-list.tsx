@@ -17,7 +17,12 @@ export default class HistoryListComponent extends React.Component<IProps, IState
     render () {
         return (
             <div>
-                {this.props.history.map((x, i) => <HistoryComponent key={i} history={x}></HistoryComponent>)}
+                <div className="font-semibold text-left m-b-md">
+                    History
+                </div>
+                <div className="list-group">
+                    {this.props.history.map((x, i) => <HistoryComponent key={i} history={x}></HistoryComponent>)}
+                </div>
             </div>
         );
     }

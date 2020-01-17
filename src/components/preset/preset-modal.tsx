@@ -27,7 +27,17 @@ export default class PresetModalComponent extends React.Component<IProps, IState
     }
 
     save () {
+        if (this.state.name === '' || this.state.diceString === '') {
+            return;
+        }
+
         this.props.onSave({name: this.state.name, diceString: this.state.diceString});
+        this.setState({ name: '', diceString: '' });
+    }
+
+    close() {
+        this.setState({ name: '', diceString: '' });
+        this.props.onClose();
     }
 
     render () {
@@ -37,15 +47,17 @@ export default class PresetModalComponent extends React.Component<IProps, IState
                     <Modal.Title>Add Preset</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <div>
-                        <input value={this.state.name} onChange={(e) => this.changeName(e)} ></input>
+                    <div className="d-flex flex-row justify-content-between m-b-sm">
+                        <div>Name</div>
+                        <div><input value={this.state.name} onChange={(e) => this.changeName(e)} ></input></div>
                     </div>
-                    <div>
-                        <input value={this.state.diceString} onChange={(e) => this.changeDiceString(e)} ></input>
+                    <div className="d-flex flex-row justify-content-between">
+                        <div>Dice</div>
+                        <div><input value={this.state.diceString} onChange={(e) => this.changeDiceString(e)} ></input></div>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={this.props.onClose}>
+                    <Button variant="secondary" onClick={() => this.close()}>
                         Close
                     </Button>
                     <Button variant="primary" onClick={() => this.save()}>

@@ -3,11 +3,13 @@ import { Preset } from '../../model/preset';
 
 interface IProps {
     preset: Preset;
-    onClick: (obj: any) => void
+    index: number;
+    onClick: (obj: any) => void;
+    onDelete: (index: number) => void;
 };
 interface IState {
-    name: string,
-    diceString: string
+    name: string;
+    diceString: string;
 };
 
 export default class PresetComponent extends React.Component<IProps, IState> {
@@ -43,12 +45,21 @@ export default class PresetComponent extends React.Component<IProps, IState> {
         return obj;
     }
 
+    delete (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+        this.props.onDelete(this.props.index);
+        e.preventDefault();
+    }
+
     render () {
         return (
-            <div>
-                <span>{this.state.name}</span>
-                <span>{this.state.diceString}</span>
-                <button onClick={() => this.props.onClick(this.parseDiceString())}>Use</button>
+            <div className="list-group-item list-group-item-action">
+                <div className="d-flex flex-row align-items-center">
+                    <div className="flex-1 d-flex flex-row" onClick={() => this.props.onClick(this.parseDiceString())}>
+                        <span className="flex-1">{this.state.name}</span>
+                        <span className="flex-1">{this.state.diceString}</span>
+                    </div>
+                    <span><button className="btn btn-outline-danger btn-sm" onClick={(e) => this.delete(e)}>Delete</button></span>
+                </div>
             </div>
         );
     }

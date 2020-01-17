@@ -24,21 +24,24 @@ export default class Main extends React.Component<IProps, IState> {
     }
 
     addPreset = (p: Preset) => {
-        let x = JSON.parse(JSON.stringify(this.state.presets));
+        let x = this.state.presets.slice(0);
         x.push(p);
         this.setState({ presets: x });
 
         localStorage.setItem('presets', JSON.stringify(x));
     }
 
-    deletePreset () {
-
+    deletePreset = (index: number) => {
+        let x = this.state.presets.slice(0);
+        x.splice(index, 1);
+        this.setState({ presets: x });
+        localStorage.setItem('presets', JSON.stringify(x));
     }
 
     addHistory = (h: RollHistory) => {
         let x = this.state.history.splice(0);
         if (x.length === 5) { x.shift(); }
-        x.push(h);
+        x.unshift(h);
         this.setState({ history: x });
 
         localStorage.setItem('history', JSON.stringify(x));
@@ -46,16 +49,26 @@ export default class Main extends React.Component<IProps, IState> {
 
     render () {
         return (
-            <div className="full-height d-flex flex-row p">
-                <div className="card flex-2 d-flex align-items-center justify-content-center m-r">
-                    <DiceMainComponent dice={this.state.dice} onRoll={this.addHistory}></DiceMainComponent>
-                </div>
-                <div className="d-flex flex-column flex-1">
-                    <div className="card flex-1 m-b p-lg">
-                        <PresetList presets={this.state.presets} onClick={this.updateDiceObj} onAdd={this.addPreset}></PresetList>
-                    </div>
-                    <div className="card flex-1 d-flex align-items-center justify-content-center p-lg">
-                        <HistoryListComponent history={this.state.history}></HistoryListComponent>
+            <div className="body">
+                <div className="p-md">
+                    <div className="row">
+                        <div className="col-lg-8 full-height d-flex m-b-md">
+                            <div className="card flex-1 d-flex align-items-center justify-content-center p-lg">
+                                <DiceMainComponent dice={this.state.dice} onRoll={this.addHistory} onClear={this.updateDiceObj}></DiceMainComponent>
+                            </div>
+                        </div>
+                        <div className="d-flex flex-column col-lg-4 m-b-md">
+                            <div className="card flex-1 m-b-md p-lg">
+                                <PresetList presets={this.state.presets} 
+                                    onClick={this.updateDiceObj} 
+                                    onAdd={this.addPreset} 
+                                    onDelete={this.deletePreset}>
+                                </PresetList>
+                            </div>
+                            <div className="card flex-1 p-lg">
+                                <HistoryListComponent history={this.state.history}></HistoryListComponent>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -6,6 +6,7 @@ import PresetModalComponent from './preset-modal';
 interface IProps {
     presets: Array<Preset>;
     onAdd: (p: Preset) => void;
+    onDelete: (index: number) => void;
     onClick: (obj: any) => void;
 };
 interface IState {
@@ -19,6 +20,14 @@ export default class PresetList extends React.Component<IProps, IState> {
         showModal: false
     };
 
+    componentDidUpdate (prevProps: IProps, prevState: IState) {
+        if (JSON.stringify(prevProps.presets) !== JSON.stringify(this.props.presets)) {
+            this.setState({
+                presets: this.props.presets
+            });
+        }
+    }
+
     openModal () {
         this.setState({ showModal: true });
     }
@@ -28,7 +37,7 @@ export default class PresetList extends React.Component<IProps, IState> {
     }
 
     onModalSave = (obj: any) => {
-        if (this.state.presets.length < 5) {
+        if (this.state.presets.length < 4) {
             let x = this.state.presets.slice();
             let p = new Preset();
             p.id = x.length + 1;
@@ -46,16 +55,17 @@ export default class PresetList extends React.Component<IProps, IState> {
     render () {
         return (
             <div>
-                <div className="d-flex flex-row justify-content-between">
-                    <div>
+                <div className="d-flex flex-row align-items-center justify-content-between m-b-md">
+                    <div className="font-semibold ">
                         Presets
                     </div>
-                    <button onClick={() => this.openModal()}>Add</button>
+                    <button className="btn btn-sm btn-outline-dark" onClick={() => this.openModal()}>Add</button>
                 </div>
-                
-                {this.state.presets.map(p => {
-                    return <PresetComponent key={p.id} preset={p} onClick={this.props.onClick}></PresetComponent>
-                })}
+                <div className="list-group d-flex flex-column">
+                    {this.state.presets.map((p, i) => {
+                        return <PresetComponent key={p.id} preset={p} index={i} onClick={this.props.onClick} onDelete={this.props.onDelete}></PresetComponent>
+                    })}
+                </div>
 
                 <PresetModalComponent show={this.state.showModal} onClose={this.onModalClose} onSave={this.onModalSave}></PresetModalComponent>
             </div>

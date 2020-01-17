@@ -1,0 +1,60 @@
+.flex-1 { flex: 1; }
+.flex-2 { flex: 2; }
+
+.b-a { border: 1px solid #000000; }
+
+.header {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+    z-index: 9999;
+    height: 44px; 
+    //background-color: rgba(0,0,0,0.8);
+    background-color: rgba(36, 41, 57, 1);
+    //backdrop-filter: saturate(180%) blur(20px);
+}
+.body {
+    padding-top: 44px;
+}
+.full-height { height: calc(82.5vh - 70px); }
+.results {
+    min-height: 48px;
+    font-size: 32px;
+}
+
+.m-b-sm { margin-bottom: 5px; }
+.m-b { margin-bottom: 10px; }
+.m-b-md { margin-bottom: 15px; }
+.m-b-lg { margin-bottom: 20px; }
+.m-b-xl { margin-bottom: 30px; }
+
+.m-r-sm { margin-right: 5px; }
+.m-r { margin-right: 10px; }
+
+.p-sm {padding: 5px; }
+.p { padding: 10px; }
+.p-md { padding: 15px; }
+.p-lg { padding: 20px; }
+
+.text-xs { font-size: 12px; }
+.text-sm { font-size: 14px; }
+.text-md { font-size: 16px; }
+.text-lg { font-size: 18px; }
+.text-xl { font-size: 20px; }
+
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.font-semibold { font-weight: 500; }
+
+input .text-center {
+    text-align: center;
+}
+
+.card {
+    border: 0px;
+    //box-shadow: 0 0 10px 0 rgba(154, 161, 171, .15);
+    box-shadow: 0px 0px 13px 0px rgba(82, 63, 105, 0.05);
+    color: #48465b;
+}
