@@ -19,7 +19,7 @@
 }
 .full-height { height: calc(82.5vh - 70px); }
 .results {
-    min-height: 48px;
+    min-height: 88px;
     font-size: 32px;
 }
 
@@ -57,4 +57,16 @@ input .text-center {
     //box-shadow: 0 0 10px 0 rgba(154, 161, 171, .15);
     box-shadow: 0px 0px 13px 0px rgba(82, 63, 105, 0.05);
     color: #48465b;
+}
+
+.h .list-group-item {
+    -webkit-transition: all 0.4s ease-out;
+    -moz-transition: all 0.4s ease-out;
+    -o-transition: all 0.4s ease-out;
+    transition: all 0.4s ease-out;
+    max-height: 0px;
+
+    &.x {
+        max-height: 100px;
+    }
 }

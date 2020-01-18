@@ -62,6 +62,7 @@ export default class PresetList extends React.Component<IProps, IState> {
                     <button className="btn btn-sm btn-outline-dark" onClick={() => this.openModal()}>Add</button>
                 </div>
                 <div className="list-group d-flex flex-column">
+                    {this.state.presets.length === 0 ? <div className="list-group-item">No Presets</div> : null}
                     {this.state.presets.map((p, i) => {
                         return <PresetComponent key={p.id} preset={p} index={i} onClick={this.props.onClick} onDelete={this.props.onDelete}></PresetComponent>
                     })}

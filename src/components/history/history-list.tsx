@@ -21,7 +21,8 @@ export default class HistoryListComponent extends React.Component<IProps, IState
                     History
                 </div>
                 <div className="list-group">
-                    {this.props.history.map((x, i) => <HistoryComponent key={i} history={x}></HistoryComponent>)}
+                    {this.props.history.length === 0 ? <div className="list-group-item">No History</div> : null}
+                    {this.props.history.map((x, i) => <HistoryComponent key={x.id} history={x}></HistoryComponent>)}
                 </div>
             </div>
         );

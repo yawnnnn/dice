@@ -39,8 +39,10 @@ export default class Main extends React.Component<IProps, IState> {
     }
 
     addHistory = (h: RollHistory) => {
+        h.id = this.state.history.length > 0 ? this.state.history[0].id + 1 : 1;
+
         let x = this.state.history.splice(0);
-        if (x.length === 5) { x.shift(); }
+        if (x.length === 5) { x.pop(); }
         x.unshift(h);
         this.setState({ history: x });
 
@@ -50,7 +52,7 @@ export default class Main extends React.Component<IProps, IState> {
     render () {
         return (
             <div className="body">
-                <div className="p-md">
+                <div className="p-md fade-in">
                     <div className="row">
                         <div className="col-lg-8 full-height d-flex m-b-md">
                             <div className="card flex-1 d-flex align-items-center justify-content-center p-lg">
@@ -58,14 +60,14 @@ export default class Main extends React.Component<IProps, IState> {
                             </div>
                         </div>
                         <div className="d-flex flex-column col-lg-4 m-b-md">
-                            <div className="card flex-1 m-b-md p-lg">
+                            <div className="card m-b-md p-lg">
                                 <PresetList presets={this.state.presets} 
                                     onClick={this.updateDiceObj} 
                                     onAdd={this.addPreset} 
                                     onDelete={this.deletePreset}>
                                 </PresetList>
                             </div>
-                            <div className="card flex-1 p-lg">
+                            <div className="card p-lg">
                                 <HistoryListComponent history={this.state.history}></HistoryListComponent>
                             </div>
                         </div>
