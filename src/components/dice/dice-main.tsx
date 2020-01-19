@@ -2,6 +2,7 @@ import React from 'react';
 import DiceComponent from './dice';
 import { Random } from '../../global/random';
 import { RollHistory } from '../../model/history';
+import { DiceUtil } from '../../global/dice-util';
 
 interface IProps {
     dice: {[key: string]: number};
@@ -12,16 +13,15 @@ interface IState {
     selected: {[key: string]: number};
     selectedString: string;
     rolled: Array<number>;
-    total: number;
     isCritical: boolean;
 };
 
 export default class DiceMainComponent extends React.Component<IProps, IState> {
+    diceUtil = new DiceUtil();
     state: IState = {
         selected: {},
         selectedString: '',
         rolled: [],
-        total: 0,
         isCritical: false
     };
 
@@ -29,29 +29,22 @@ export default class DiceMainComponent extends React.Component<IProps, IState> {
         if (JSON.stringify(prevProps.dice) !== JSON.stringify(this.props.dice)) {
             this.setState({
                 selected: this.props.dice,
-                selectedString: this.parseDiceObj(this.props.dice)
+                selectedString: this.diceUtil.parseDiceObject(this.props.dice)
             });
         }
     }
     
     select (sides: number) {
-        let obj = this.state.selected;
-        let property = sides.toString();
-        obj[property] = obj[property] ? obj[property] + 1 : 1;
+        let obj: {[key: string]: number} = JSON.parse(JSON.stringify(this.state.selected));
+        let sSides = sides.toString();
+        obj[sSides] = obj[sSides] ? obj[sSides] + 1 : 1;
+        let diceString = Object.keys(obj).map(key => obj[key] + 'd' + key).join(' + ');
 
-        let selectedArray = [];
-        for (const prop in obj) {
-            let string = obj[prop].toString() + 'd' + prop;
-            selectedArray.push(string);
-        }
-        let selectedString = selectedArray.join(' + ')
-
-        this.setState({ selected: obj, selectedString: selectedString });
+        this.setState({ selected: obj, selectedString: diceString });
     }
 
     roll () {
         let rolled = [];
-        let total = 0;
         let obj = this.state.selected;
 
         if (Object.keys(obj).length > 0) {
@@ -60,16 +53,15 @@ export default class DiceMainComponent extends React.Component<IProps, IState> {
                 for (let i = 0; i < numDice; i++) {
                     let x = new Random().roll(Number(prop));
                     rolled.push(x);
-                    total += x;
                 }
             }
     
-            this.setState({ rolled: rolled, total: total });
+            this.setState({ rolled: rolled, isCritical: false });
     
             let h = new RollHistory();
             h.id = 1;
-            h.diceString = this.generateFinalDiceString();
-            h.total = total;
+            h.diceString = this.state.isCritical ? this.diceUtil.createCriticalDiceString(this.state.selectedString.slice(0)) : this.state.selectedString;
+            h.total = rolled.reduce((a, v) => a + v, 0);
             h.dateTime = new Date(Date.now()).valueOf();
             h.isCritical = this.state.isCritical;
             this.props.onRoll(h);
@@ -80,8 +72,7 @@ export default class DiceMainComponent extends React.Component<IProps, IState> {
         this.setState({
             selected: {},
             selectedString: '',
-            rolled: [],
-            total: 0
+            rolled: []
         });
 
         this.props.onClear({});
@@ -92,56 +83,10 @@ export default class DiceMainComponent extends React.Component<IProps, IState> {
     }
 
     blurSelectedString() {
-        // TODO: Make the validation here more robust.
-        if (this.state.selectedString !== '') {
-            let obj: {[key: string]: number} = {};
-            let x = this.state.selectedString.slice(0);
-            x = x.replace(' ', ''); // Remove spaces.
-            let stringArray = x.split('+');
-
-            stringArray.forEach(diceString => {
-                let diceArray = diceString.split('d');
-                let num = Number(diceArray[0]);
-                let sides = diceArray[1];
-                obj[sides.toString()] = num;
-            });
-
+        if (this.state.selectedString && this.state.selectedString !== '') {
+            let obj = this.diceUtil.parseDiceString(this.state.selectedString.slice(0));
             this.setState({selected: obj});
         }
-    }
-
-    generateFinalDiceString (): string {
-        let s = '';
-
-        if (this.state.isCritical) {
-            let x = this.state.selectedString.slice(0);
-            x = x.replace(' ', ''); // Remove spaces.
-            let stringArray = x.split('+');
-            let newArray: Array<string> = [];
-
-            stringArray.forEach(diceString => {
-                let diceArray = diceString.split('d');
-                let num = Number(diceArray[0]) * 2;
-                let sides = diceArray[1];
-                newArray.push(num.toString() + 'd' + sides);
-            });
-
-            s = newArray.join(' + ');
-        } else {
-            s = this.state.selectedString;
-        }
-
-        return s;
-    }
-
-    parseDiceObj (dice: any): string {
-        let a = [];
-
-        for (const prop in dice) {
-            let string = dice[prop].toString() + 'd' + prop;
-            a.push(string);
-        }
-        return a.join(' + ');
     }
 
     toggleCritical () {
@@ -156,8 +101,8 @@ export default class DiceMainComponent extends React.Component<IProps, IState> {
         return (
             <React.Fragment>
                 <div className="results p-lg m-b-md">
-                    {this.state.rolled.length === 1 ? this.state.total : null}
-                    {this.state.rolled.length > 1 ? this.state.rolled.join(' + ') + ' = ' + this.state.total : null}
+                    {this.state.rolled.length === 1 ? this.state.rolled[0] : null}
+                    {this.state.rolled.length > 1 ? this.state.rolled.join(' + ') + ' = ' + this.state.rolled.reduce((a, v) => a + v, 0) : null}
                 </div>
                 <div>
                     <div className="m-b">

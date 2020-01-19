@@ -8,8 +8,13 @@ interface IState {};
 
 export default class HistoryComponent extends React.Component<IProps, IState> {
     render () {
+        let additionalClassString = '';
+        if (this.props.history.isCritical) {
+            additionalClassString = 'list-group-item-danger';
+        }
+        
         return (
-            <div className={"list-group-item " + (this.props.history.isCritical ? 'list-group-item-danger' : '')}>
+            <div className={"list-group-item " + additionalClassString}>
                 <div className="d-flex flex-row align-items-center">
                     <div className="flex-1 text-left text-xs">
                         {new Date(this.props.history.dateTime).toLocaleDateString() + ' ' + new Date(this.props.history.dateTime).toLocaleTimeString()}

@@ -52,7 +52,7 @@ export default class PresetComponent extends React.Component<IProps, IState> {
 
     render () {
         return (
-            <div className="list-group-item list-group-item-action">
+            <div className="list-group-item">
                 <div className="d-flex flex-row align-items-center">
                     <div className="flex-1 d-flex flex-row" onClick={() => this.props.onClick(this.parseDiceString())}>
                         <span className="flex-1">{this.state.name}</span>
