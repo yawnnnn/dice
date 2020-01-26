@@ -1,5 +1,6 @@
 import React from 'react';
 import { Preset } from '../../model/preset';
+import { DiceUtil } from '../../global/dice-util';
 
 interface IProps {
     preset: Preset;
@@ -13,6 +14,7 @@ interface IState {
 };
 
 export default class PresetComponent extends React.Component<IProps, IState> {
+    diceUtil = new DiceUtil();
     state: IState = {
         name: this.props.preset ? this.props.preset.name : '',
         diceString: this.props.preset ? this.props.preset.diceString : ''
@@ -26,6 +28,12 @@ export default class PresetComponent extends React.Component<IProps, IState> {
         this.setState({diceString: e.target.value});
     }
 
+    clickPreset() {
+        this.props.onClick(this.diceUtil.parseDiceString(this.state.diceString));
+        window.scrollTo({left: 0, top: 0, behavior: 'smooth'});
+    }
+
+    /*
     parseDiceString (): any {
         let obj: {[key: string]: number} = {};
 
@@ -44,6 +52,7 @@ export default class PresetComponent extends React.Component<IProps, IState> {
 
         return obj;
     }
+    */
 
     delete (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         this.props.onDelete(this.props.index);
@@ -54,7 +63,7 @@ export default class PresetComponent extends React.Component<IProps, IState> {
         return (
             <div className="list-group-item">
                 <div className="d-flex flex-row align-items-center">
-                    <div className="flex-1 d-flex flex-row" onClick={() => this.props.onClick(this.parseDiceString())}>
+                    <div className="flex-1 d-flex flex-row" onClick={() => this.clickPreset()}>
                         <span className="flex-1">{this.state.name}</span>
                         <span className="flex-1">{this.state.diceString}</span>
                     </div>

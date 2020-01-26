@@ -27,7 +27,7 @@ export default class PresetModalComponent extends React.Component<IProps, IState
     }
 
     save () {
-        if (this.state.name === '' || this.state.diceString === '') {
+        if (this.state.name === '' || this.state.diceString === '' || !/^[0-9d\s+]*$/.test(this.state.diceString)) {
             return;
         }
 

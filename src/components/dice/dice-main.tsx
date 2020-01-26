@@ -38,8 +38,7 @@ export default class DiceMainComponent extends React.Component<IProps, IState> {
         let obj: {[key: string]: number} = JSON.parse(JSON.stringify(this.state.selected));
         let sSides = sides.toString();
         obj[sSides] = obj[sSides] ? obj[sSides] + 1 : 1;
-        let diceString = Object.keys(obj).map(key => obj[key] + 'd' + key).join(' + ');
-
+        let diceString = this.diceUtil.parseDiceObject(obj);
         this.setState({ selected: obj, selectedString: diceString });
     }
 
@@ -49,12 +48,17 @@ export default class DiceMainComponent extends React.Component<IProps, IState> {
 
         if (Object.keys(obj).length > 0) {
             for (const prop in obj) {
-                let numDice = !this.state.isCritical ? obj[prop] : obj[prop] * 2;
-                for (let i = 0; i < numDice; i++) {
-                    let x = new Random().roll(Number(prop));
-                    rolled.push(x);
+                if (prop !== '0') {
+                    let numDice = !this.state.isCritical ? obj[prop] : obj[prop] * 2;
+                    for (let i = 0; i < numDice; i++) {
+                        let x = new Random().roll(Number(prop));
+                        rolled.push(x);
+                    }
                 }
             }
+
+            // Tack on straight number values at the end.
+            if (obj.hasOwnProperty('0')) { rolled.push(obj['0']); }
     
             this.setState({ rolled: rolled, isCritical: false });
     
